@@ -1,0 +1,98 @@
+# ==============================================================
+# Finance System Manager - Git Ignore Configuration
+# ==============================================================
+
+# --------------------------------------------------------------
+# 1. Build and Compiled Output (Maven)
+# --------------------------------------------------------------
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.original
+*.zip
+*.tar.gz
+*.rar
+
+# --------------------------------------------------------------
+# 2. Local Database & Runtime State (NEVER commit local database files)
+# --------------------------------------------------------------
+data/
+**/data/
+*.db
+*.mv.db
+*.lock.db
+*.trace.db
+amfi_scheme_cache.json
+**/amfi_scheme_cache.json
+
+# --------------------------------------------------------------
+# 3. Environment Variables & Credentials
+# --------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.crt
+*.cer
+
+# --------------------------------------------------------------
+# 4. Logs and Temporary Files
+# --------------------------------------------------------------
+*.log
+logs/
+**/logs/
+*.pid
+*.tmp
+*.temp
+tmp/
+temp/
+
+# --------------------------------------------------------------
+# 5. IDE and Editor Specific Files
+# --------------------------------------------------------------
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.vscode/
+*.code-workspace
+.settings/
+.project
+.classpath
+.factorypath
+bin/
+*.sublime-project
+*.sublime-workspace
+
+# --------------------------------------------------------------
+# 6. Operating System Specific Files
+# --------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# --------------------------------------------------------------
+# 7. Package Managers & Dependency Directories
+# --------------------------------------------------------------
+node_modules/
+package-lock.json
+
+# --------------------------------------------------------------
+# 8. Temporary Scratch / Testing Scripts
+# --------------------------------------------------------------
+scratch/
