@@ -44,12 +44,16 @@ public class DashboardAndFamilySyncTests {
     @Autowired
     private FamilyLinkService familyLinkService;
 
+    @Autowired
+    private TestSeedHelper testSeedHelper;
+
     private User student1;
     private User student2;
     private User parent;
 
     @BeforeEach
     void setup() {
+        testSeedHelper.ensureTestData();
         student1 = userRepository.findByEmail("student@university.edu").orElseThrow();
         parent = userRepository.findByEmail("parent@family.com").orElseThrow();
 

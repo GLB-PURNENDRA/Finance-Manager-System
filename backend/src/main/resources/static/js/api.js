@@ -6,22 +6,33 @@ const TOKEN_KEY = "fsm_token";
 const USER_KEY = "fsm_user";
 
 function getToken() {
-  return localStorage.getItem(TOKEN_KEY);
+  return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
 }
 
-function setSession(token, user) {
-  localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+function setSession(token, user, rememberMe = true) {
+  if (rememberMe) {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
+  } else {
+    sessionStorage.setItem(TOKEN_KEY, token);
+    sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  }
 }
 
 function getStoredUser() {
-  const data = localStorage.getItem(USER_KEY);
+  const data = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
   return data ? JSON.parse(data) : null;
 }
 
 function clearSession() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(USER_KEY);
 }
 
 async function apiRequest(endpoint, method = "GET", body = null, isFormData = false) {
@@ -49,6 +60,12 @@ async function apiRequest(endpoint, method = "GET", body = null, isFormData = fa
     const res = await fetch(`${API_BASE_URL}${endpoint}`, config);
 
     if (res.status === 401) {
+      const errData = await res.json().catch(() => ({}));
+      const msg = errData.message || "Invalid credentials or session expired.";
+      if (endpoint.startsWith("/auth/")) {
+        showToast(msg, "error");
+        throw new Error(msg);
+      }
       clearSession();
       showToast("Session expired or unauthorized. Please sign in.", "error");
       openAuthModal();

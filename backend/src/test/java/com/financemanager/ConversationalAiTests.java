@@ -34,11 +34,15 @@ public class ConversationalAiTests {
     @Autowired
     private FamilyLinkRepository familyLinkRepository;
 
+    @Autowired
+    private TestSeedHelper testSeedHelper;
+
     private User student;
     private User parent;
 
     @BeforeEach
     void setUp() {
+        testSeedHelper.ensureTestData();
         student = userRepository.findByEmail("student@university.edu").orElseThrow();
         parent = userRepository.findByEmail("parent@family.com").orElseThrow();
         intelligenceService.clearConversationHistory(student);

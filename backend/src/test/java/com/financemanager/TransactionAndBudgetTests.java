@@ -38,10 +38,14 @@ public class TransactionAndBudgetTests {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TestSeedHelper testSeedHelper;
+
     private User student;
 
     @BeforeEach
     void setUp() {
+        testSeedHelper.ensureTestData();
         student = userRepository.findByEmail("student@university.edu").orElseThrow();
     }
 

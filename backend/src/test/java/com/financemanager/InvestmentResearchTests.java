@@ -50,12 +50,16 @@ public class InvestmentResearchTests {
     @Autowired
     private InvestorProfileRepository investorProfileRepository;
 
+    @Autowired
+    private TestSeedHelper testSeedHelper;
+
     private User student;
     private User parent;
     private FamilyLink link;
 
     @BeforeEach
     public void setup() {
+        testSeedHelper.ensureTestData();
         student = userRepository.findByEmail("student@university.edu").orElseThrow();
         parent = userRepository.findByEmail("parent@family.com").orElseThrow();
 

@@ -2,7 +2,9 @@ package com.financemanager.controller;
 
 import com.financemanager.dto.AuthRequest;
 import com.financemanager.dto.AuthResponse;
+import com.financemanager.dto.ForgotPasswordRequest;
 import com.financemanager.dto.RegisterRequest;
+import com.financemanager.dto.ResetPasswordRequest;
 import com.financemanager.entity.User;
 import com.financemanager.service.AuthService;
 import jakarta.validation.Valid;
@@ -29,6 +31,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, Object>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        return ResponseEntity.ok(authService.forgotPassword(request));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 
     @GetMapping("/me")

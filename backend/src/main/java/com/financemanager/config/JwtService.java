@@ -29,16 +29,22 @@ public class JwtService {
     }
 
     public String generateToken(User user) {
+        return generateToken(user, false);
+    }
+
+    public String generateToken(User user, boolean rememberMe) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("role", user.getRole().name());
         claims.put("displayName", user.getDisplayName());
 
+        long validity = rememberMe ? (30L * 24 * 60 * 60 * 1000L) : jwtExpirationMs;
+
         return Jwts.builder()
                 .claims(claims)
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .expiration(new Date(System.currentTimeMillis() + validity))
                 .signWith(getSigningKey())
                 .compact();
     }

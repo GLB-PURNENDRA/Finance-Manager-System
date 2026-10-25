@@ -45,11 +45,15 @@ public class ParentLinkingAndAccessTests {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TestSeedHelper testSeedHelper;
+
     private User student;
     private User parent;
 
     @BeforeEach
     void setUp() {
+        testSeedHelper.ensureTestData();
         student = userRepository.findByEmail("student@university.edu").orElseThrow();
         parent = userRepository.findByEmail("parent@family.com").orElseThrow();
     }
