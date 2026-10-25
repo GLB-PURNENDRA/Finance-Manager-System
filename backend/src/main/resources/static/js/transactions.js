@@ -67,6 +67,11 @@ async function loadTransactions() {
   if (startDate) params.append("startDate", startDate);
   if (endDate) params.append("endDate", endDate);
 
+  if (currentUser && currentUser.role === "PARENT") {
+    const parentStudentId = localStorage.getItem("parent_selected_student_id");
+    if (parentStudentId) params.append("studentId", parentStudentId);
+  }
+
   try {
     const list = await apiRequest(`/transactions?${params.toString()}`);
     renderTransactionsTable(list || []);

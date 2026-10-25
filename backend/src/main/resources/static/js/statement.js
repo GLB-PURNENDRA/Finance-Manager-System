@@ -133,6 +133,7 @@ async function commitStatementImport() {
     statementParsedRows = [];
     document.getElementById("statement-file-input").value = "";
     loadDashboard();
+    loadTransactions();
   } catch (err) {
     // Handled in api.js
   }

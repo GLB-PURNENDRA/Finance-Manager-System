@@ -143,8 +143,8 @@ function renderCategoryDonutChart(categoryMap) {
   }
 
   const colors = [
-    "#2563FF", "#4D8DFF", "#25D695", "#FFB84D",
-    "#FF5D73", "#A78BFA", "#00E5FF", "#F472B6", "#60A5FA"
+    "#D4AF37", "#F5D77A", "#B8860B", "#10B981",
+    "#E5C158", "#8F6B18", "#E2E8F0", "#F43F5E", "#94A3B8"
   ];
 
   const total = entries.reduce((acc, curr) => acc + Number(curr[1]), 0);
@@ -177,13 +177,13 @@ function renderCategoryDonutChart(categoryMap) {
 
     const largeArcFlag = s.endAngle - s.startAngle > 180 ? 1 : 0;
     const d = `M 100 100 L ${startX} ${startY} A 70 70 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
-    paths += `<path d="${d}" fill="${s.color}" stroke="rgba(10, 16, 36, 0.9)" stroke-width="2"><title>${s.cat}: ${formatCurrency(s.val)} (${s.percent}%)</title></path>`;
+    paths += `<path d="${d}" fill="${s.color}" stroke="rgba(16, 17, 20, 0.95)" stroke-width="2"><title>${s.cat}: ${formatCurrency(s.val)} (${s.percent}%)</title></path>`;
   });
 
-  // SVG inner cutout for Donut with fintech glass center
-  paths += `<circle cx="100" cy="100" r="44" fill="rgba(10, 16, 36, 0.92)" stroke="rgba(77, 141, 255, 0.2)" stroke-width="1.5" />`;
-  paths += `<text x="100" y="95" text-anchor="middle" font-size="9" fill="#9BA9C7" font-weight="700" letter-spacing="1">TOTAL</text>`;
-  paths += `<text x="100" y="112" text-anchor="middle" font-size="12" fill="#F5F7FF" font-weight="800">${formatCurrency(total)}</text>`;
+  // SVG inner cutout for Donut with luxury black-gold glass center
+  paths += `<circle cx="100" cy="100" r="44" fill="rgba(16, 17, 20, 0.95)" stroke="rgba(212, 175, 55, 0.3)" stroke-width="1.5" />`;
+  paths += `<text x="100" y="95" text-anchor="middle" font-size="9" fill="#A5A5AD" font-weight="700" letter-spacing="1">TOTAL</text>`;
+  paths += `<text x="100" y="112" text-anchor="middle" font-size="12" fill="#F5D77A" font-weight="800">${formatCurrency(total)}</text>`;
 
   // Legend
   let legendHtml = `<div style="display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 14px; justify-content: center;">`;
@@ -236,46 +236,46 @@ function renderTrendsBarChart(trends, isParent) {
     const expHeight = Math.max(3, (Number(t.expense || 0) / maxVal) * chartHeight);
     const expY = chartHeight - expHeight + 20;
 
-    // Expense bar (Danger Coral glow)
+    // Expense bar (Refined Rose)
     svgBars += `
-      <rect x="${x}" y="${expY}" width="${barWidth}" height="${expHeight}" fill="#FF5D73" rx="4">
+      <rect x="${x}" y="${expY}" width="${barWidth}" height="${expHeight}" fill="#F43F5E" rx="4">
         <title>Expense (${t.monthLabel}): ${formatCurrency(t.expense)}</title>
       </rect>
     `;
 
-    // Income bar (Emerald Green glow - only shown if not in parent view)
+    // Income bar (Refined Emerald - only shown if not in parent view)
     if (!isParent) {
       const incHeight = Math.max(3, (Number(t.income || 0) / maxVal) * chartHeight);
       const incY = chartHeight - incHeight + 20;
       svgBars += `
-        <rect x="${x + barWidth + 3}" y="${incY}" width="${barWidth}" height="${incHeight}" fill="#25D695" rx="4">
+        <rect x="${x + barWidth + 3}" y="${incY}" width="${barWidth}" height="${incHeight}" fill="#10B981" rx="4">
           <title>Income (${t.monthLabel}): ${formatCurrency(t.income)}</title>
         </rect>
       `;
     }
 
     xLabels += `
-      <text x="${x + barWidth}" y="${chartHeight + 38}" text-anchor="middle" font-size="10" fill="#9BA9C7">${t.monthLabel}</text>
+      <text x="${x + barWidth}" y="${chartHeight + 38}" text-anchor="middle" font-size="10" fill="#A5A5AD">${t.monthLabel}</text>
     `;
   });
 
   const legend = isParent ? `
     <div style="display: flex; gap: 14px; margin-top: 10px; font-size: 12px; justify-content: center;">
-      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: #FF5D73; border-radius: 3px; box-shadow: 0 0 8px rgba(255,93,115,0.4);"></span> Expenses</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: #F43F5E; border-radius: 3px; box-shadow: 0 0 8px rgba(244,63,94,0.4);"></span> Expenses</div>
     </div>
   ` : `
     <div style="display: flex; gap: 14px; margin-top: 10px; font-size: 12px; justify-content: center;">
-      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: #FF5D73; border-radius: 3px; box-shadow: 0 0 8px rgba(255,93,115,0.4);"></span> Expenses</div>
-      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: #25D695; border-radius: 3px; box-shadow: 0 0 8px rgba(37,214,149,0.4);"></span> Income</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: #F43F5E; border-radius: 3px; box-shadow: 0 0 8px rgba(244,63,94,0.4);"></span> Expenses</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: #10B981; border-radius: 3px; box-shadow: 0 0 8px rgba(16,185,129,0.4);"></span> Income</div>
     </div>
   `;
 
   container.innerHTML = `
     <svg width="100%" height="200" viewBox="0 0 ${chartWidth} 200" preserveAspectRatio="xMidYMid meet">
       <!-- Grid lines -->
-      <line x1="20" y1="20" x2="${chartWidth}" y2="20" stroke="rgba(77, 141, 255, 0.08)" stroke-width="1" />
-      <line x1="20" y1="${chartHeight / 2 + 20}" x2="${chartWidth}" y2="${chartHeight / 2 + 20}" stroke="rgba(77, 141, 255, 0.08)" stroke-width="1" />
-      <line x1="20" y1="${chartHeight + 20}" x2="${chartWidth}" y2="${chartHeight + 20}" stroke="rgba(77, 141, 255, 0.16)" stroke-width="1" />
+      <line x1="20" y1="20" x2="${chartWidth}" y2="20" stroke="rgba(212, 175, 55, 0.08)" stroke-width="1" />
+      <line x1="20" y1="${chartHeight / 2 + 20}" x2="${chartWidth}" y2="${chartHeight / 2 + 20}" stroke="rgba(212, 175, 55, 0.08)" stroke-width="1" />
+      <line x1="20" y1="${chartHeight + 20}" x2="${chartWidth}" y2="${chartHeight + 20}" stroke="rgba(212, 175, 55, 0.16)" stroke-width="1" />
       ${svgBars}
       ${xLabels}
     </svg>

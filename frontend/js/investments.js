@@ -37,7 +37,7 @@ function renderInvestments(list) {
     }
 
     tr.innerHTML = `
-      <td><span class="badge" style="background: rgba(77, 141, 255, 0.12); color: var(--electric-blue); border: 1px solid rgba(77, 141, 255, 0.25);">${escapeHtml(inv.assetType)}</span></td>
+      <td><span class="badge" style="background: rgba(212, 175, 55, 0.12); color: var(--electric-blue); border: 1px solid rgba(212, 175, 55, 0.3);">${escapeHtml(inv.assetType)}</span></td>
       <td><strong>${escapeHtml(inv.assetName)}</strong></td>
       <td>${formatCurrency(inv.investedAmount)}</td>
       <td><strong>${formatCurrency(inv.currentValue)}</strong></td>

@@ -103,7 +103,7 @@ async function loadParentLinkStatus() {
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                   <span class="badge badge-active">ACTIVE LINK</span>
-                  ${isSelected ? '<span class="badge" style="background: var(--primary); color: #fff;">CURRENTLY VIEWING</span>' : ''}
+                  ${isSelected ? '<span class="badge" style="background: var(--primary); color: #08090B; font-weight: 700;">CURRENTLY VIEWING</span>' : ''}
                 </div>
                 <h4 style="font-size: 16px; font-weight: 700; color: var(--text-main);">${escapeHtml(l.studentName)}</h4>
                 <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Student Email: <strong>${escapeHtml(l.studentEmail)}</strong></p>

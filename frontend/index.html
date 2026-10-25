@@ -7,15 +7,37 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Ambient Atmospheric Glowing Orbs (Liquid Depth) -->
+  <!-- Ambient Luxury Golden Glow & Flowing Streamlines Canvas -->
   <div class="ambient-glow-mesh" aria-hidden="true">
     <div class="ambient-orb orb-primary"></div>
     <div class="ambient-orb orb-secondary"></div>
     <div class="ambient-orb orb-accent"></div>
+    <svg class="gold-waves-svg" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+      <defs>
+        <linearGradient id="goldWaveGrad1" x1="0%" y1="0%" x2="100%" y2="80%">
+          <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.32" />
+          <stop offset="35%" stop-color="#F5D77A" stop-opacity="0.5" />
+          <stop offset="70%" stop-color="#8F6B18" stop-opacity="0.2" />
+          <stop offset="100%" stop-color="#D4AF37" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="goldWaveGrad2" x1="100%" y1="100%" x2="0%" y2="20%">
+          <stop offset="0%" stop-color="#F5D77A" stop-opacity="0.25" />
+          <stop offset="50%" stop-color="#D4AF37" stop-opacity="0.4" />
+          <stop offset="100%" stop-color="#8F6B18" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path d="M-100,180 C280,320 540,60 920,220 C1200,340 1380,180 1560,120" stroke="url(#goldWaveGrad1)" stroke-width="1.8" opacity="0.7" />
+      <path d="M-100,210 C290,350 560,90 940,250 C1220,370 1400,210 1580,150" stroke="url(#goldWaveGrad1)" stroke-width="1.2" opacity="0.5" />
+      <path d="M-100,240 C300,380 580,120 960,280 C1240,400 1420,240 1600,180" stroke="url(#goldWaveGrad1)" stroke-width="0.8" opacity="0.35" />
+      <path d="M-80,270 C310,410 600,150 980,310 C1260,430 1440,270 1620,210" stroke="url(#goldWaveGrad1)" stroke-width="0.6" opacity="0.22" />
+      <path d="M300,920 C640,680 920,860 1280,660 C1400,590 1500,620 1600,600" stroke="url(#goldWaveGrad2)" stroke-width="1.6" opacity="0.6" />
+      <path d="M320,950 C660,710 940,890 1300,690 C1420,620 1520,650 1620,630" stroke="url(#goldWaveGrad2)" stroke-width="1.0" opacity="0.4" />
+      <path d="M340,980 C680,740 960,920 1320,720 C1440,650 1540,680 1640,660" stroke="url(#goldWaveGrad2)" stroke-width="0.7" opacity="0.25" />
+    </svg>
   </div>
 
   <!-- App Main Layout -->

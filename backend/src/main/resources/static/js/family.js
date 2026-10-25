@@ -90,50 +90,71 @@ async function loadParentLinkStatus() {
       return;
     }
 
-    const currentLink = links[0]; // Primary link
-    let statusContent = "";
+    const currentSelectedId = localStorage.getItem("parent_selected_student_id");
+    let html = `<div style="display: flex; flex-direction: column; gap: 14px;">`;
 
-    if (currentLink.status === "ACTIVE") {
-      statusContent = `
-        <div style="background: rgba(37, 214, 149, 0.08); border: 1px solid var(--success-border); border-radius: var(--radius-lg); padding: 22px; backdrop-filter: var(--blur-card);">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-              <span class="badge badge-active" style="margin-bottom: 8px;">ACTIVE LINK</span>
-              <h4 style="font-size: 16px; font-weight: 700; color: var(--text-main);">Linked to: ${escapeHtml(currentLink.studentName)}</h4>
-              <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Student Email: ${escapeHtml(currentLink.studentEmail)}</p>
-              <p style="font-size: 11px; color: var(--success); margin-top: 4px;">Approved on: ${formatDate(currentLink.approvedAt)} • Read-only visibility enabled</p>
-            </div>
-            <button class="btn btn-danger btn-sm" onclick="revokeLink(${currentLink.id})">Disconnect Link</button>
-          </div>
-        </div>
-      `;
-    } else if (currentLink.status === "PENDING") {
-      statusContent = `
-        <div style="background: rgba(255, 184, 77, 0.08); border: 1px solid var(--warning-border); border-radius: var(--radius-lg); padding: 22px; backdrop-filter: var(--blur-card);">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-              <span class="badge badge-pending" style="margin-bottom: 8px;">REQUEST PENDING</span>
-              <h4 style="font-size: 15px; font-weight: 700; color: var(--warning);">Awaiting Student Approval</h4>
-              <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Request sent to: ${escapeHtml(currentLink.studentEmail)}</p>
-              <p style="font-size: 11px; color: #f59e0b; margin-top: 4px;">Zero student data is visible while in pending state.</p>
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="revokeLink(${currentLink.id})">Cancel Request</button>
-          </div>
-        </div>
-      `;
-    } else {
-      statusContent = `
-        <div style="background: var(--bg-glass-card); backdrop-filter: var(--blur-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; text-align: center;">
-          <span class="badge badge-revoked" style="margin-bottom: 8px;">REVOKED</span>
-          <p style="font-size: 13px; color: var(--text-secondary);">The link with ${escapeHtml(currentLink.studentEmail)} has been revoked. Send a new request above if needed.</p>
-        </div>
-      `;
-    }
+    links.forEach(l => {
+      const isSelected = String(l.studentId) === String(currentSelectedId) || (!currentSelectedId && l.status === "ACTIVE");
 
-    card.innerHTML = statusContent;
+      if (l.status === "ACTIVE") {
+        html += `
+          <div style="background: rgba(37, 214, 149, 0.08); border: 1px solid ${isSelected ? 'var(--primary)' : 'var(--success-border)'}; border-radius: var(--radius-lg); padding: 20px; backdrop-filter: var(--blur-card);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span class="badge badge-active">ACTIVE LINK</span>
+                  ${isSelected ? '<span class="badge" style="background: var(--primary); color: #08090B; font-weight: 700;">CURRENTLY VIEWING</span>' : ''}
+                </div>
+                <h4 style="font-size: 16px; font-weight: 700; color: var(--text-main);">${escapeHtml(l.studentName)}</h4>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Student Email: <strong>${escapeHtml(l.studentEmail)}</strong></p>
+                <p style="font-size: 11px; color: var(--success); margin-top: 4px;">Approved on: ${formatDate(l.approvedAt)} • Read-only expense visibility enabled</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                ${!isSelected ? `<button class="btn btn-secondary btn-sm" onclick="selectStudentForParent(${l.studentId})">View Finances</button>` : ''}
+                <button class="btn btn-danger btn-sm" onclick="revokeLink(${l.id})">Disconnect Link</button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (l.status === "PENDING") {
+        html += `
+          <div style="background: rgba(255, 184, 77, 0.08); border: 1px solid var(--warning-border); border-radius: var(--radius-lg); padding: 20px; backdrop-filter: var(--blur-card);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <span class="badge badge-pending" style="margin-bottom: 6px;">REQUEST PENDING</span>
+                <h4 style="font-size: 15px; font-weight: 700; color: var(--warning);">Awaiting Student Approval</h4>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Request sent to: <strong>${escapeHtml(l.studentEmail)}</strong></p>
+                <p style="font-size: 11px; color: #f59e0b; margin-top: 4px;">Zero student data is visible while in pending state.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="revokeLink(${l.id})">Cancel Request</button>
+            </div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div style="background: var(--bg-glass-card); backdrop-filter: var(--blur-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <span class="badge badge-revoked" style="margin-bottom: 6px;">REVOKED</span>
+              <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Access for <strong>${escapeHtml(l.studentEmail)}</strong> has been terminated.</p>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    html += `</div>`;
+    card.innerHTML = html;
   } catch (err) {
     console.error("Failed to load parent link status:", err);
   }
+}
+
+function selectStudentForParent(studentId) {
+  localStorage.setItem("parent_selected_student_id", studentId);
+  showToast("Active student switched.", "success");
+  loadParentLinkStatus();
+  loadDashboard(studentId);
+  loadTransactions();
 }
 
 async function submitParentLinkRequest() {
@@ -159,6 +180,8 @@ async function approveLink(linkId) {
     await apiRequest(`/family/links/${linkId}/approve`, "POST");
     showToast("Parent link approved successfully! Read-only visibility granted.", "success");
     loadStudentLinkRequests();
+    loadDashboard();
+    loadTransactions();
   } catch (err) {
     // Handled in api.js
   }
@@ -170,6 +193,7 @@ async function revokeLink(linkId) {
     showToast("Link revoked immediately. Access has been removed.", "info");
     loadFamilyLinks();
     loadDashboard();
+    loadTransactions();
   } catch (err) {
     // Handled in api.js
   }

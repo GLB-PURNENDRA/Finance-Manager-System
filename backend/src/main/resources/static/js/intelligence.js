@@ -67,7 +67,7 @@ function renderMoneyLeaks(leaks) {
 
     let detailsList = "";
     if (l.recordDetails && l.recordDetails.length > 0) {
-      detailsList = `<div style="margin-top: 10px; font-size: 11px; color: var(--text-secondary); background: rgba(10, 16, 36, 0.7); border: 1px solid var(--border); padding: 8px; border-radius: var(--radius-sm); max-height: 80px; overflow-y: auto;">` +
+        detailsList = `<div style="margin-top: 10px; font-size: 11px; color: var(--text-secondary); background: var(--bg-glass-input); border: 1px solid var(--border); padding: 8px; border-radius: var(--radius-sm); max-height: 80px; overflow-y: auto;">` +
         l.recordDetails.map(d => `<div>• ${escapeHtml(d)}</div>`).join("") +
         `</div>`;
     }
@@ -188,7 +188,7 @@ async function loadAiStatus() {
         badge.style.color = "var(--success)";
       } else {
         badge.textContent = "Deterministic Conversational AI (Demo Mode)";
-        badge.style.background = "rgba(37, 99, 255, 0.15)";
+        badge.style.background = "rgba(212, 175, 55, 0.15)";
         badge.style.borderColor = "var(--border-glow)";
         badge.style.color = "var(--accent-blue-light)";
       }
@@ -466,7 +466,7 @@ function renderGoalCoach(suggestions) {
           <div style="font-size: 20px; font-weight: 800; color: var(--primary);">${formatCurrency(s.recommendedMonthlySavings)}/mo</div>
         </div>
         <p style="margin-bottom: 10px; line-height: 1.4;">${escapeHtml(s.reasoning)}</p>
-        <div style="background: rgba(10, 16, 36, 0.7); border-left: 3px solid var(--electric-blue); border: 1px solid var(--border); border-left-width: 3px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary);">
+        <div style="background: var(--bg-glass-input); border-left: 3px solid var(--electric-blue); border: 1px solid var(--border); border-left-width: 3px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary);">
           ${escapeHtml(s.suggestedBudgetTradeOff)}
         </div>
       </div>
@@ -501,7 +501,7 @@ function renderPredictor(pred) {
         </div>
       </div>
 
-      <div style="background: rgba(10, 16, 36, 0.7); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+      <div style="background: var(--bg-glass-input); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
         <h5 style="font-size: 13px; font-weight: 700; color: var(--electric-blue); margin-bottom: 4px;">Pace Confidence & Uncertainty Interval (±12%)</h5>
         <p style="font-size: 13px; color: var(--text-main); margin-bottom: 6px;">${escapeHtml(pred.confidenceMessage)}</p>
         <span style="font-size: 11px; color: var(--text-secondary);">
