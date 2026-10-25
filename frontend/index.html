@@ -379,28 +379,136 @@
 
         <!-- 5. INVESTMENTS VIEW -->
         <section class="app-view" id="investments-view">
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <h3 class="card-title">Investment Portfolio</h3>
-                <p class="card-subtitle">Track asset allocation, valuation, and recorded profit/loss</p>
-              </div>
+          <!-- Portfolio View Header & Live Controls -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h2 style="font-size: 20px; font-weight: 700; color: #FFFFFF; display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <span>Investment Portfolio</span>
+                <span id="inv-live-status-pill" class="badge" style="background: rgba(0, 208, 156, 0.12); color: #00D09C; border: 1px solid rgba(0, 208, 156, 0.3); font-size: 11px;">
+                  🟢 Live Market Connected
+                </span>
+              </h2>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin: 0;">
+                Real-time multi-asset valuations across Indian Equities, US Stocks, ETFs, Mutual Funds, Gold & Crypto
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span id="inv-last-sync-text" style="font-size: 11px; color: var(--text-muted);">
+                Synced: Just now
+              </span>
+              <button class="btn btn-secondary btn-sm" id="btn-refresh-inv" onclick="refreshPortfolioLive()" title="Sync real-time prices from Yahoo Finance, AMFI & CoinGecko">
+                <span id="inv-refresh-icon">🔄</span> Refresh Live Prices
+              </button>
               <button class="btn btn-primary btn-sm student-only" onclick="openInvestmentModal()">
                 + Add Investment
               </button>
+            </div>
+          </div>
+
+          <!-- Portfolio KPI Metrics Grid -->
+          <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-bottom: 20px;">
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Current Valuation</span>
+                <span class="metric-icon" style="background: rgba(212, 175, 55, 0.15); color: var(--primary-bright);">📈</span>
+              </div>
+              <div class="metric-value text-gold" id="inv-kpi-current-val">₹0.00</div>
+              <div class="metric-sub" id="inv-kpi-asset-count" style="color: var(--text-muted); font-size: 11.5px;">
+                0 Active Assets
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Total Invested</span>
+                <span class="metric-icon" style="background: rgba(255, 255, 255, 0.08); color: #FFFFFF;">💼</span>
+              </div>
+              <div class="metric-value" id="inv-kpi-invested">₹0.00</div>
+              <div class="metric-sub" style="color: var(--text-muted); font-size: 11.5px;">
+                Total Capital Deployed
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Total Unrealized P&L</span>
+                <span class="metric-icon" style="background: rgba(0, 208, 156, 0.15); color: #00D09C;">📊</span>
+              </div>
+              <div class="metric-value" id="inv-kpi-pnl">₹0.00</div>
+              <div class="metric-sub" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                <span class="badge" id="inv-kpi-pnl-pct" style="background: rgba(0, 208, 156, 0.15); color: #00D09C;">
+                  +0.00%
+                </span>
+                <span style="color: var(--text-muted); font-size: 11px;">All-time return</span>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Today's Session Movement</span>
+                <span class="metric-icon" style="background: rgba(77, 141, 255, 0.15); color: #4D8DFF;">⚡</span>
+              </div>
+              <div class="metric-value" id="inv-kpi-daychange">₹0.00</div>
+              <div class="metric-sub" style="color: var(--text-muted); font-size: 11.5px;">
+                Day Gain / Loss (24h)
+              </div>
+            </div>
+          </div>
+
+          <!-- Asset Allocation Card -->
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header" style="padding-bottom: 12px;">
+              <div>
+                <h3 class="card-title" style="font-size: 15px;">Asset Allocation</h3>
+                <p class="card-subtitle">Diversification spread across financial market instruments</p>
+              </div>
+            </div>
+            <div class="card-body" style="padding-top: 0;">
+              <div class="allocation-bar-wrapper">
+                <div class="allocation-bar" id="inv-allocation-bar">
+                  <!-- Proportional segments populated dynamically -->
+                </div>
+              </div>
+              <div class="allocation-legend-grid" id="inv-allocation-legend">
+                <!-- Legend items populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Holdings Table Card -->
+          <div class="card">
+            <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 class="card-title" style="font-size: 15px;">Holdings & Live Market Prices</h3>
+                <p class="card-subtitle">Automated market pricing via Yahoo Finance, AMFI and CoinGecko</p>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <select class="form-control" id="inv-filter-type" style="padding: 6px 12px; font-size: 12px; max-width: 170px;" onchange="filterInvestmentsTable()">
+                  <option value="ALL">All Categories</option>
+                  <option value="INDIAN_STOCKS">Indian Stocks</option>
+                  <option value="US_STOCKS">US Stocks</option>
+                  <option value="ETFS">ETFs</option>
+                  <option value="MUTUAL_FUNDS">Mutual Funds</option>
+                  <option value="GOLD">Gold</option>
+                  <option value="CRYPTO">Crypto</option>
+                  <option value="BONDS">Bonds / FDs</option>
+                </select>
+                <input type="text" class="form-control" id="inv-filter-search" placeholder="Search holdings..." style="padding: 6px 12px; font-size: 12px; width: 160px;" oninput="filterInvestmentsTable()">
+              </div>
             </div>
             <div class="card-body" style="padding: 0;">
               <div class="table-responsive">
                 <table>
                   <thead>
                     <tr>
-                      <th>Asset Type</th>
-                      <th>Asset Name</th>
-                      <th>Invested Capital</th>
+                      <th>Asset & Symbol</th>
+                      <th>Category</th>
+                      <th>Qty / Units</th>
+                      <th>Avg Buy Price</th>
+                      <th>Live Market Price</th>
+                      <th>Total Invested</th>
                       <th>Current Valuation</th>
-                      <th>Recorded P&L</th>
-                      <th>Return %</th>
-                      <th>Last Updated</th>
+                      <th>Unrealized P&L</th>
                       <th class="student-only">Actions</th>
                     </tr>
                   </thead>
@@ -1267,44 +1375,137 @@
 
   <!-- ADD / EDIT INVESTMENT MODAL -->
   <div class="modal-overlay" id="investment-modal">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width: 620px;">
       <div class="modal-header">
-        <h3 id="inv-modal-title">Add Investment Asset</h3>
+        <div>
+          <h3 id="inv-modal-title" style="margin-bottom: 2px;">Add Investment Asset</h3>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin: 0;">Market quotes and valuations auto-sync with live financial APIs.</p>
+        </div>
         <button class="modal-close" onclick="closeModal('investment-modal')">&times;</button>
       </div>
       <form id="inv-form" onsubmit="handleInvestmentSubmit(event)">
-        <div class="modal-body">
+        <div class="modal-body" style="max-height: calc(85vh - 120px); overflow-y: auto;">
           <input type="hidden" id="inv-id">
+
+          <!-- 1. Asset Category Selector -->
+          <div class="form-group">
+            <label class="form-label">Asset Category</label>
+            <select class="form-control" id="inv-type" required onchange="handleAssetTypeChange()">
+              <option value="INDIAN_STOCKS">🇮🇳 Indian Stocks (NSE / BSE)</option>
+              <option value="US_STOCKS">🇺🇸 US Stocks (NASDAQ / NYSE)</option>
+              <option value="ETFS">📊 Exchange Traded Funds (ETFs)</option>
+              <option value="MUTUAL_FUNDS">🏛️ Mutual Funds (AMFI Official NAV)</option>
+              <option value="GOLD">🪙 Gold (Digital / Sovereign / ETF)</option>
+              <option value="CRYPTO">⚡ Cryptocurrency (Spot Prices)</option>
+              <option value="BONDS">📜 Bonds / Govt Securities</option>
+              <option value="FIXED_DEPOSIT">🏦 Fixed Deposit (FD)</option>
+            </select>
+          </div>
+
+          <!-- 2. Symbol / Identifier & Asset Name -->
           <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Asset Type</label>
-              <select class="form-control" id="inv-type" required>
-                <option value="MUTUAL_FUNDS">Mutual Funds</option>
-                <option value="STOCKS">Stocks / Equities</option>
-                <option value="GOLD">Digital Gold</option>
-                <option value="BONDS">Bonds / Govt Securities</option>
-                <option value="FIXED_DEPOSIT">Fixed Deposit (FD)</option>
-              </select>
+            <div class="form-group" style="position: relative; flex: 1.1;">
+              <label class="form-label" id="lbl-inv-symbol">Stock Ticker / Market Symbol</label>
+              <div style="display: flex; gap: 6px;">
+                <input type="text" class="form-control" id="inv-symbol" placeholder="e.g. RELIANCE.NS, TCS.NS" autocomplete="off" oninput="handleSymbolInput(this.value)">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-fetch-quote" onclick="fetchLiveQuoteForSymbol()" style="white-space: nowrap; font-size: 11.5px; padding: 0 10px;">
+                  ⚡ Quote
+                </button>
+              </div>
+              <div id="symbol-autocomplete-dropdown" class="autocomplete-dropdown" style="display: none;"></div>
+              <small class="form-hint" id="hint-inv-symbol">Type ticker or select suggestion for live pricing</small>
             </div>
-            <div class="form-group">
-              <label class="form-label">Asset Name</label>
-              <input type="text" class="form-control" id="inv-name" required placeholder="e.g. Nifty 50 Index Fund">
+            <div class="form-group" style="flex: 1.3;">
+              <label class="form-label">Asset / Company Name</label>
+              <input type="text" class="form-control" id="inv-name" required placeholder="e.g. Reliance Industries Ltd">
             </div>
           </div>
+
+          <!-- 3. Live Market Quote Callout Banner -->
+          <div id="inv-live-price-callout" style="display: none; margin-bottom: 16px; padding: 12px 14px; background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.28); border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <span style="font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--primary-bright); font-weight: 700;">📡 Live Market Quote</span>
+                <div style="font-size: 15px; font-weight: 700; color: #FFFFFF; margin-top: 2px;">
+                  <span id="callout-symbol-text">RELIANCE.NS</span>: <span id="callout-price-text" class="text-gold">₹1,190.00</span>
+                  <span id="callout-change-badge" class="badge" style="margin-left: 6px; font-size: 11px;">+1.2%</span>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="applyQuoteToPurchasePrice()" style="font-size: 11px; padding: 4px 10px;">
+                Use as Buy Price
+              </button>
+            </div>
+            <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 4px;" id="callout-source-text">
+              Source: Yahoo Finance API • Updated just now
+            </div>
+          </div>
+
+          <!-- 4. Quantity & Purchase Price -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Invested Capital (₹)</label>
-              <input type="number" step="0.01" class="form-control" id="inv-invested" required min="0.01">
+              <label class="form-label" id="lbl-inv-qty">Quantity (Shares)</label>
+              <input type="number" step="any" class="form-control" id="inv-qty" value="1" min="0.000001" required oninput="recalcInvestedAndCurrent()">
+              <small class="form-hint" id="hint-inv-qty">Number of shares or units acquired</small>
             </div>
             <div class="form-group">
-              <label class="form-label">Current Recorded Valuation (₹)</label>
-              <input type="number" step="0.01" class="form-control" id="inv-current" required min="0">
+              <label class="form-label" id="lbl-inv-buy-price">Purchase Price Per Share (₹)</label>
+              <input type="number" step="any" class="form-control" id="inv-buy-price" placeholder="0.00" min="0" required oninput="recalcInvestedAndCurrent()">
+              <small class="form-hint" id="hint-inv-buy-price">Cost basis per unit</small>
             </div>
+          </div>
+
+          <!-- 5. Brokerage Charges & Investment Date -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" id="lbl-inv-charges">Brokerage & Charges (₹)</label>
+              <input type="number" step="0.01" class="form-control" id="inv-charges" value="0.00" min="0" oninput="recalcInvestedAndCurrent()">
+              <small class="form-hint">STT, Exchange turnover, stamp duty, or brokerage</small>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Investment Date</label>
+              <input type="date" class="form-control" id="inv-date">
+            </div>
+          </div>
+
+          <!-- 6. Summary Calculations Preview -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Total Capital Invested</label>
+              <input type="number" step="0.01" class="form-control" id="inv-invested" required min="0.01">
+              <small class="form-hint">Auto: (Qty × Buy Price) + Charges</small>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Live Market Price / Unit</label>
+              <input type="number" step="any" class="form-control" id="inv-current-price" placeholder="Auto-synced from API" oninput="recalcInvestedAndCurrent()">
+              <small class="form-hint">Current rate used for valuation</small>
+            </div>
+          </div>
+
+          <!-- 7. Estimated Valuation & Currency -->
+          <div class="form-row">
+            <div class="form-group" style="flex: 2;">
+              <label class="form-label">Current Total Valuation</label>
+              <input type="number" step="0.01" class="form-control" id="inv-current" required min="0">
+              <small class="form-hint">Calculated: Qty × Current Market Price</small>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label class="form-label">Currency</label>
+              <select class="form-control" id="inv-currency">
+                <option value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 8. Notes -->
+          <div class="form-group">
+            <label class="form-label">Notes & Strategy (Optional)</label>
+            <textarea class="form-control" id="inv-notes" rows="2" placeholder="e.g. Core retirement holding, bought during market dip"></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeModal('investment-modal')">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Asset</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-inv">Save Investment</button>
         </div>
       </form>
     </div>

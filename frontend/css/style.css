@@ -1800,3 +1800,158 @@ input[type="range"].form-control {
     height: 440px;
   }
 }
+
+/* ==============================================================
+   Investment Portfolio & Live Market Data Styling
+   ============================================================== */
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  max-height: 240px;
+  overflow-y: auto;
+  background: rgba(16, 17, 20, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+.autocomplete-item {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: var(--transition-fast);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover, .autocomplete-item.active {
+  background: rgba(212, 175, 55, 0.12);
+}
+
+.autocomplete-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.autocomplete-symbol {
+  font-weight: 700;
+  font-size: 13px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.autocomplete-name {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.autocomplete-item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.autocomplete-price {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--primary-bright);
+}
+
+.autocomplete-exchange {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Allocation Bar */
+.allocation-bar-wrapper {
+  margin: 16px 0;
+}
+
+.allocation-bar {
+  display: flex;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.allocation-segment {
+  height: 100%;
+  transition: width 0.4s ease-in-out;
+  position: relative;
+}
+
+.allocation-segment:hover {
+  filter: brightness(1.2);
+}
+
+.allocation-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.allocation-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-sm);
+}
+
+.legend-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.legend-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.legend-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+@keyframes spinIcon {
+  100% { transform: rotate(360deg); }
+}
+
+.spin-animation {
+  display: inline-block;
+  animation: spinIcon 1s linear infinite;
+}

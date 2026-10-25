@@ -1,6 +1,9 @@
 package com.financemanager.controller;
 
 import com.financemanager.dto.InvestmentDto;
+import com.financemanager.dto.MarketQuoteDto;
+import com.financemanager.dto.MarketSearchResultDto;
+import com.financemanager.dto.PortfolioSummaryDto;
 import com.financemanager.entity.User;
 import com.financemanager.service.InvestmentService;
 import jakarta.validation.Valid;
@@ -22,6 +25,34 @@ public class InvestmentController {
     @GetMapping
     public ResponseEntity<List<InvestmentDto>> getInvestments(@AuthenticationPrincipal User currentUser) {
         return ResponseEntity.ok(investmentService.getInvestments(currentUser));
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<PortfolioSummaryDto> getPortfolioSummary(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(investmentService.getPortfolioSummary(currentUser));
+    }
+
+    @PostMapping("/refresh-prices")
+    public ResponseEntity<PortfolioSummaryDto> refreshPrices(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(investmentService.refreshPortfolioPrices(currentUser));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<MarketSearchResultDto>> searchSymbols(
+            @RequestParam(required = false, defaultValue = "") String query,
+            @RequestParam(required = false) String assetType) {
+        return ResponseEntity.ok(investmentService.searchSymbols(query, assetType));
+    }
+
+    @GetMapping("/quote")
+    public ResponseEntity<MarketQuoteDto> getLiveQuote(
+            @RequestParam String symbol,
+            @RequestParam(required = false) String assetType) {
+        MarketQuoteDto quote = investmentService.getLiveQuote(symbol, assetType);
+        if (quote != null) {
+            return ResponseEntity.ok(quote);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
